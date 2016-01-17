@@ -1,14 +1,10 @@
-## SET WORKING DIRECTORY
-setwd("~/Desktop/Experiments/CS E-S Production - like/Results/data/")
-
-
 ## LOAD REQUIRED PACKAGES
 library(lme4)
 library(dplyr)
 
 
 ## READ IN DATA AND ORGANIZE
-data = read.table("formants.txt", header=T, sep="\t")
+data = read.table("data/formants.txt", header=T, sep="\t")
 
 # Add column for gender
 data = data %>%

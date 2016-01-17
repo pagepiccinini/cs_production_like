@@ -60,28 +60,32 @@ dev.off()
 data_clos = subset(data_sub, closure_duration > 0)
 closure_duration_plot <- ggplot(data_clos, aes(x=context_cat, y=closure_duration)) +
 					geom_boxplot(aes(fill=context_start_lg)) +
-					scale_fill_manual(values=c("white", "grey")) +
-					ggtitle("'like' Closure Duration by\nContext and Start Language") +
+					#scale_fill_manual(values=c("white", "grey")) +
+          scale_fill_manual(values=c(eng_col, sp_col)) +
+					ggtitle("/k/ Closure Duration by\nContext and Start Language") +
 					xlab("Context") +
 					ylab("Duration in ms") +
-					guides(fill=guide_legend(title="")) +
+          guides(fill=guide_legend(title="Language preceeding \'like\'")) +
 					theme_bw() +
-					theme(text=element_text(size=18), title=element_text(size=18), panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), legend.position=c(0.15, 0.9))
-	#pdf("../figures/closure_duration.pdf")
+          theme(text=element_text(size=18), title=element_text(size=18), panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+            legend.position="top", legend.key=element_blank())
+	pdf("figures/closure_duration.pdf")
 closure_duration_plot
-	#dev.off()
+	dev.off()
 	
 # Boxplot of burst duration
 data_burst = subset(data_sub, burst_duration > 0)
 burst_duration_plot <- ggplot(data_burst, aes(x=context_cat, y=burst_duration)) +
 					geom_boxplot(aes(fill=context_start_lg)) +
-					scale_fill_manual(values=c("white", "grey")) +
-					ggtitle("'like' Burst Duration by\nContext and Start Language") +
+					#scale_fill_manual(values=c("white", "grey")) +
+          scale_fill_manual(values=c(eng_col, sp_col)) +
+					ggtitle("/k/ Burst Duration by\nContext and Start Language") +
 					xlab("Context") +
 					ylab("Duration in ms") +
-					guides(fill=guide_legend(title="")) +
+          guides(fill=guide_legend(title="Language preceeding \'like\'")) +
 					theme_bw() +
-					theme(text=element_text(size=18), title=element_text(size=18), panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"), legend.position=c(0.15, 0.9))
-	#pdf("../figures/burst_duration.pdf")
+          theme(text=element_text(size=18), title=element_text(size=18), panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+              legend.position="top", legend.key=element_blank())
+	pdf("figures/burst_duration.pdf")
 burst_duration_plot
-	#dev.off()
+	dev.off()

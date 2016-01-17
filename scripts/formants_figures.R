@@ -1,11 +1,18 @@
-## READ IN LIBRARIES
+## LOAD LIBRARIES ####
 library(ggplot2)
+library(RColorBrewer)
 
 
-## ORGAINZIE DATA
-# Set working directory for source file and read in file for organizing data
-setwd("~/Desktop/Experiments/CS E-S Production - like/Results/scripts/")
-source("data_organization_formants_bark.R")
+## READ IN DATA ####
+source("scripts/data_organization_formants_bark.R")
+
+
+## SET COLORS ####
+cols = brewer.pal(5, "PRGn")
+col_eng = cols[5]
+col_sp = cols[1]
+col_cses = cols[4]
+col_csse = cols[2]
 
 
 ## PLOT FIGURE
@@ -31,16 +38,19 @@ data_means = data_noout %>%
 	summarise(f1_mean = mean(f1_norm_bark, na.rm=T), f2_mean = mean(f2_norm_bark, na.rm=T)) %>%
 	ungroup()
 	
-formants_mean_plot = ggplot(data_means, aes(x=f2_mean, y=f1_mean, group=context_specific, linetype=context_specific)) +
-	geom_smooth(color="black", size=1) +
+formants_mean_plot = ggplot(data_means, aes(x=f2_mean, y=f1_mean, group=context_specific, linetype=context_specific, color=context_specific)) +
+	geom_smooth(size=2, se=FALSE) +
 	ggtitle("/la\u026A/ Formant Values by\nContext and Language Preceding Token") +
 	xlab("F2 Bark Normalized") +
 	ylab("F1 Bark Normalized") +
-	scale_linetype_manual(values=c("solid", "dashed", "dotted", "dotdash")) +
+  scale_color_manual(values=c(col_eng, col_cses, col_sp, col_csse)) +
+	scale_linetype_manual(values=c("solid", "dashed", "solid", "dashed")) +
 	annotate("text", x = 4.5, y = 10.9, label = "0% into /la\u026A/") +
 	annotate("text", x = 1.5, y = 11.2, label = "100% into /la\u026A/") +
+  guides(fill = guide_legend(title = "LEFT", title.position = "left")) +
 	theme_bw() +
-	theme(legend.title=element_blank(), text=element_text(size=18), title=element_text(size=18), legend.position=c(0.55, 0.85), panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
-	cairo_pdf("../figures/like_formants_means.pdf")
+  theme(text=element_text(size=18), title=element_text(size=18), panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+        legend.position="top", legend.key=element_blank())
+cairo_pdf("figures/like_formants_means.pdf")
 formants_mean_plot
-	dev.off()
+dev.off()
