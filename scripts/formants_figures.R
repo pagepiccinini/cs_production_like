@@ -1,10 +1,10 @@
-## LOAD LIBRARIES ####
-library(ggplot2)
-library(RColorBrewer)
-
-
 ## READ IN DATA ####
 source("scripts/data_organization_formants_bark.R")
+
+
+## LOAD PACKAGES ####
+library(ggplot2)
+library(RColorBrewer)
 
 
 ## SET COLORS ####
@@ -15,7 +15,7 @@ col_cses = cols[4]
 col_csse = cols[2]
 
 
-## PLOT FIGURE
+## PLOT FIGURE ####
 data_noout$context_specific = factor(data_noout$context_specific, levels=c("E", "CS_ES", "S", "CS_SE"), labels=c("ML English", "CS English", "ML Spanish", "CS Spanish"))
 
 formants_plot = ggplot(data_noout, aes(x=f2_norm_bark, y=f1_norm_bark, group=context_specific, linetype=context_specific)) +
@@ -39,18 +39,19 @@ data_means = data_noout %>%
 	ungroup()
 	
 formants_mean_plot = ggplot(data_means, aes(x=f2_mean, y=f1_mean, group=context_specific, linetype=context_specific, color=context_specific)) +
-	geom_smooth(size=2, se=FALSE) +
+	geom_smooth(size=1) +
 	ggtitle("/la\u026A/ Formant Values by\nContext and Language Preceding Token") +
 	xlab("F2 Bark Normalized") +
 	ylab("F1 Bark Normalized") +
-  scale_color_manual(values=c(col_eng, col_cses, col_sp, col_csse)) +
-	scale_linetype_manual(values=c("solid", "dashed", "solid", "dashed")) +
+  scale_color_manual(values=c("black", "white", "black", "white")) +
+	scale_linetype_manual(values=c(1, 1, 2, 2)) +
 	annotate("text", x = 4.5, y = 10.9, label = "0% into /la\u026A/") +
 	annotate("text", x = 1.5, y = 11.2, label = "100% into /la\u026A/") +
-  guides(fill = guide_legend(title = "LEFT", title.position = "left")) +
+  guides(color = guide_legend(title = ""), linetype = guide_legend(title = "")) +
 	theme_bw() +
   theme(text=element_text(size=18), title=element_text(size=18), panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
         legend.position="top", legend.key=element_blank())
+
 cairo_pdf("figures/like_formants_means.pdf")
 formants_mean_plot
 dev.off()
