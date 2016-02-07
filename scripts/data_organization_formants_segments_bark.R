@@ -1,14 +1,10 @@
-## SET WORKING DIRECTORY
-setwd("~/Desktop/Experiments/CS E-S Production - like/Results/data/")
-
-
-## LOAD REQUIRED PACKAGES
+## LOAD PACKAGES ####
 library(lme4)
 library(dplyr)
 
 
-## READ IN DATA AND ORGANIZE
-data = read.table("formants_segments.txt", header=T, sep="\t")
+## READ IN DATA AND ORGANIZE ####
+data = read.table("data/formants_segments.txt", header=T, sep="\t")
 
 # Add column for gender
 data = data %>%
@@ -31,11 +27,11 @@ data_sub = subset(data, context_specific=="E" | context_specific=="S" | context_
 	data_sub$context_cat = factor(data_sub$context_cat)
 	data_sub$context_start_lg = factor(data_sub$context_start_lg)
 	
-# Make factor for phoneem
+# Make factor for phoneme
 data_sub$phoneme = factor(data_sub$phoneme)
 
 
-## REMOVE OUTLIERS
+## REMOVE OUTLIERS ####
 # Compute F1, F2, and F3 means and standard deviations
 formant_summ = data_sub %>%
 	group_by(speaker, percentage, phoneme) %>%
@@ -76,7 +72,7 @@ data_noout = data_noout %>%
 	mutate(f1_norm_bark = ifelse(f1_norm_bark < 6, NA, f1_norm_bark))
 	
 	
-## COMPUTE VARAIBLES FOR TESTING
+## COMPUTE VARAIBLES FOR TESTING ####
 # [l]
 data_l = filter(data_noout, phoneme == "l")
 	data_l$phoneme = factor(data_l$phoneme)

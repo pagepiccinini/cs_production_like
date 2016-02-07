@@ -1,10 +1,8 @@
-## ORGAINZIE DATA
-# Set working directory for source file and read in file for organizing data
-setwd("~/Desktop/Experiments/CS E-S Production - like/Results/scripts/")
-source("data_organization_formants_segments_bark.R")
+## READ IN DATA ####
+source("scripts/data_organization_formants_segments_bark.R")
 
 
-## PREPARE VARAIBLES FOR LMER
+## PREPARE VARAIBLES FOR LMER ####
 # Context (baseline set to ML)
 contrasts(data_ai_off_summ$context_cat) = c(0.5, -0.5)
 data_ai_off_summ$context_catContrast = contrasts(data_ai_off_summ$context_cat)[,1][as.numeric(data_ai_off_summ$context_cat)]
@@ -21,63 +19,57 @@ data_ai_off_summ$taskContrast = contrasts(data_ai_off_summ$task)[,1][as.numeric(
 contrasts(data_ai_off_summ$gram_cat) = c(-0.5, 0.5)
 data_ai_off_summ$gram_catContrast = contrasts(data_ai_off_summ$gram_cat)[,1][as.numeric(data_ai_off_summ$gram_cat)]
 
-# Sex (baseline set to F)
-contrasts(data_ai_off_summ$sex) = c(-0.5, 0.5)
-data_ai_off_summ$sexContrast = contrasts(data_ai_off_summ$sex)[,1][as.numeric(data_ai_off_summ$sex)]
 
-
-## RUN LMER ON F1
+## RUN LMER ON F1 ####
 # Full model
-off_f1.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast + (1+ context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
+off_f1.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast +
+                     (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
 
-summary(off_f1.lmer)
+off_f1.lmer_sum = summary(off_f1.lmer)
 
 # Test for effect of context
-off_f1_context.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast - context_catContrast + (1 + context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
+off_f1_context.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast - context_catContrast +
+                             (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
 
-anova(off_f1.lmer, off_f1_context.lmer)
+off_f1_context.anova = anova(off_f1.lmer, off_f1_context.lmer)
 
 # Test for effect of starting language
-off_f1_startlg.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast - context_start_lgContrast + (1 + context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
+off_f1_startlg.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast - context_start_lgContrast +
+                             (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
 
-anova(off_f1.lmer, off_f1_startlg.lmer)
-
-# Test for effect of sex
-off_f1_sex.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast - sexContrast + (1 + context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
-
-anova(off_f1.lmer, off_f1_sex.lmer)
+off_f1_startlg.anova = anova(off_f1.lmer, off_f1_startlg.lmer)
 
 # Test for interaction of context and starting language
-off_f1_contextxstartlg.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast - context_catContrast:context_start_lgContrast + (1 + context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
+off_f1_contextxstartlg.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast - context_catContrast:context_start_lgContrast +
+                                     (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
 
-anova(off_f1.lmer, off_f1_contextxstartlg.lmer)
+off_f1_contextxstartlg.anova = anova(off_f1.lmer, off_f1_contextxstartlg.lmer)
 
 
-## RUN LMER ON F2
+## RUN LMER ON F2 ####
 # Full model
-off_f2.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast + (1 + context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
+off_f2.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast +
+                     (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
 
-summary(off_f2.lmer)
+off_f2.lmer_sum = summary(off_f2.lmer)
 
 # Test for effect of context
-off_f2_context.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast - context_catContrast + (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
+off_f2_context.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast - context_catContrast +
+                             (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
 
-anova(off_f2.lmer, off_f2_context.lmer)
+off_f2_context.anova = anova(off_f2.lmer, off_f2_context.lmer)
 
 # Test for effect of starting language
-off_f2_startlg.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast - context_start_lgContrast + (1 + context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
+off_f2_startlg.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast - context_start_lgContrast +
+                             (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
 
-anova(off_f2.lmer, off_f2_startlg.lmer)
-
-# Test for effect of sex
-off_f2_sex.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast - sexContrast + (1+ context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
-
-anova(off_f2.lmer, off_f2_sex.lmer)
+off_f2_startlg.anova = anova(off_f2.lmer, off_f2_startlg.lmer)
 
 # Test for interaction of context and starting language
-off_f2_contextxstartlg.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast + sexContrast - context_catContrast:context_start_lgContrast + (1+ context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
+off_f2_contextxstartlg.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast - context_catContrast:context_start_lgContrast +
+                                     (1+context_start_lgContrast|speaker), data=data_ai_off_summ, REML=F)
 
-anova(off_f2.lmer, off_f2_contextxstartlg.lmer)
+off_f2_contextxstartlg.anova = anova(off_f2.lmer, off_f2_contextxstartlg.lmer)
 
 
 

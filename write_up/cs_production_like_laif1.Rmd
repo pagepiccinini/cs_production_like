@@ -1,0 +1,49 @@
+---
+title: 'CS Production like: /lai/ Formant Analysis'
+author: "Page Piccinini"
+date: "February 7, 2016"
+output: html_document
+---
+```{r, echo=F}
+load("cs_production_like_environment.RData")
+```
+
+# F1 Results
+
+Full model results.
+
+```{r, echo=FALSE}
+coef(f1.lmer_sum)[,1:2]
+```
+
+Results of model comparisions.
+
+```{r}
+f1_context.anova[,1:8]
+f1_startlg.anova[,1:8]
+f1_percentage.anova[,1:8]
+f1_contextxstartlg.anova[,1:8]
+f1_contextxpercentage.anova[,1:8]
+f1_startlgxpercentage.anova[,1:8]
+f1_contextxstartlgxpercentage.anova[,1:8]
+```
+
+# F2 Results
+
+Full model results.
+
+```{r, echo=FALSE}
+coef(f2.lmer_sum)[,1:2]
+```
+
+Results of model comparisions.
+
+```{r}
+f2_context.anova[,1:8]
+f2_startlg.anova[,1:8]
+f2_percentage.anova[,1:8]
+f2_contextxstartlg.anova[,1:8]
+f2_contextxpercentage.anova[,1:8]
+f2_startlgxpercentage.anova[,1:8]
+f2_contextxstartlgxpercentage.anova[,1:8]
+```

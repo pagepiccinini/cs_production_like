@@ -1,9 +1,9 @@
-## LOAD REQUIRED PACKAGES
+## LOAD PACKAGES ####
 library(lme4)
 library(dplyr)
 
 
-## READ IN DATA AND ORGANIZE
+## READ IN DATA AND ORGANIZE ####
 data = read.table("data/formants.txt", header=T, sep="\t")
 
 # Add column for gender
@@ -28,7 +28,7 @@ data_sub = subset(data, context_specific=="E" | context_specific=="S" | context_
 	data_sub$context_start_lg = factor(data_sub$context_start_lg)
 
 
-## REMOVE OUTLIERS
+## REMOVE OUTLIERS ####
 # Compute F1, F2, and F3 means means and standard deviations
 formant_summ = data_sub %>%
 	group_by(speaker, percentage) %>%
