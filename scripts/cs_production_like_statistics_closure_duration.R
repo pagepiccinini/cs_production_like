@@ -1,36 +1,20 @@
-## SET WORKING DIRECTORY
-setwd("~/Desktop/Experiments/CS E-S Production - like/Results/data/")
-
-
-## LOAD PACKAGES
+## LOAD PACKAGES ####
 library(lme4)
 library(ggplot2)
 
 
-## READ IN DATA AND CLEAN
-data = read.table("duration.txt", header=T, sep="\t")
+## LOAD PACKAGES ####
+library(lme4)
 
-# Get rid of 'verb' and 'grammatical' tokens
-data = subset(data, gram_cat!="V" & gram_cat!="G")
-	data$gram_cat = factor(data$gram_cat)
-	
-# Get rid of 'CS3' tokens
-data = subset(data, context_cat!="CS3")
-	data$context_cat = factor(data$context_cat)
-	data$context_start_lg = factor(data$context_start_lg)
-	data$context_specific = factor(data$context_specific)
-	
-# Subset out data with main code-switching tokens
-data_sub = subset(data, context_specific=="E" | context_specific=="S" | context_specific=="CS_ES" | context_specific=="CS_SE")
-	data_sub$context_specific = factor(data_sub$context_specific)
-	data_sub$context_cat = factor(data_sub$context_cat)
-	data_sub$context_start_lg = factor(data_sub$context_start_lg)
+
+## READ IN DATA ####
+source("scripts/cs_production_like_cleaning_duration.R")
 	
 # Subset out data where the duration of the closure is 0
 data_clos = subset(data_sub, closure_duration > 0)
 	
 	
-## PREPARE VARAIBLES FOR LMER
+## PREPARE VARAIBLES FOR LMER ####
 # Context (baseline set to ML)
 contrasts(data_clos$context_cat) = c(0.5, -0.5)
 data_clos$context_catContrast = contrasts(data_clos$context_cat)[,1][as.numeric(data_clos$context_cat)]
@@ -48,7 +32,7 @@ contrasts(data_clos$gram_cat) = c(-0.5, 0.5)
 data_clos$gram_catContrast = contrasts(data_clos$gram_cat)[,1][as.numeric(data_clos$gram_cat)]
 
 
-## RUN LMERS ON DURATION OF CLOSURE
+## RUN LMERS ON DURATION OF CLOSURE ####
 # Full model
 data_clos.lmer = lmer(closure_duration ~ context_catContrast * context_start_lgContrast * taskContrast + gram_catContrast + (1+context_catContrast+context_start_lgContrast+taskContrast+gram_catContrast|speaker), data=data_clos, REML=F)
 

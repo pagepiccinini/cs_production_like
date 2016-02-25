@@ -1,11 +1,9 @@
-## ORGAINZIE DATA
-# Set working directory for source file and read in file for organizing data
-setwd("~/Desktop/Experiments/CS E-S Production - like/Results/scripts/")
-source("data_organization.R")
+## ORGANIZE DATA ####
+source("scripts/cs_production_like_cleaning_duration.R")
 
 data_clos = data_sub	
 	
-## PREPARE VARAIBLES FOR glmer
+## PREPARE VARAIBLES FOR ANALYSIS ####
 # Context (baseline set to ML)
 contrasts(data_clos$context_cat) = c(0.5, -0.5)
 data_clos$context_catContrast = contrasts(data_clos$context_cat)[,1][as.numeric(data_clos$context_cat)]
@@ -25,7 +23,8 @@ data_clos$gram_catContrast = contrasts(data_clos$gram_cat)[,1][as.numeric(data_c
 
 ## RUN GLMERS ON PRESENCE OF CLOSURE
 # Full model
-data_clos.glmer = glmer(closure_presence ~ context_catContrast * context_start_lgContrast + (1+context_catContrast|speaker), data=data_clos, family="binomial")
+data_clos.glmer = glmer(closure_presence ~ context_catContrast * context_start_lgContrast +
+                          (1+context_catContrast|speaker), data=data_clos, family="binomial")
 
 summary(data_clos.glmer)
 

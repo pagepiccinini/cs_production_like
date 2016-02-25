@@ -1,14 +1,9 @@
-## SET WORKING DIRECTORY
-setwd("~/Desktop/Experiments/CS E-S Production - like/Results/data/")
-
-
-## LOAD PACKAGES
-library(lme4)
-library(ggplot2)
+## LOAD PACKAGES ####
+# [none currently]
 
 
 ## READ IN DATA AND CLEAN
-data = read.table("duration.txt", header=T, sep="\t")
+data = read.table("data/duration.txt", header=T, sep="\t")
 
 # Get rid of 'verb' and 'grammatical' tokens
 data = subset(data, gram_cat!="V" & gram_cat!="G")

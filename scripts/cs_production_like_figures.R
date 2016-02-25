@@ -1,6 +1,5 @@
-## LOAD PACKAGES
+## LOAD PACKAGES ####
 library(dplyr)
-library(lme4)
 library(ggplot2)
 library(RColorBrewer)
 
@@ -14,7 +13,7 @@ col_csse = colors[2]
 
 
 
-## READ IN DATA AND CLEAN
+## READ IN DATA AND CLEAN ####
 data = read.table("data/duration.txt", header=T, sep="\t")
 
 # Get rid of 'verb' tokens
@@ -59,7 +58,7 @@ data_burst_sum = data_sub %>%
   ungroup()
 	
 
-## MAKE PLOTS
+## MAKE PLOTS ####
 # Boxplot of like duration
 duration_plot <- ggplot(data_sub, aes(x=context_start_lg, y=like_duration_ms)) +
 					geom_boxplot(aes(fill=context_specific)) +

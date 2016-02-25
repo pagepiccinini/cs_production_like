@@ -1,11 +1,13 @@
-## ORGAINZIE DATA
-# Set working directory for source file and read in file for organizing data
-setwd("~/Desktop/Experiments/CS E-S Production - like/Results/scripts/")
-source("data_organization.R")
+## LOAD PACKAGES ####
+library(lme4)
+
+
+## READ IN DATA ####
+source("scripts/cs_production_like_cleaning_duration.R")
 
 data_burst = data_sub	
 	
-## PREPARE VARAIBLES FOR glmer
+## PREPARE VARAIBLES FOR glmer ####
 # Context (baseline set to ML)
 contrasts(data_burst$context_cat) = c(0.5, -0.5)
 data_burst$context_catContrast = contrasts(data_burst$context_cat)[,1][as.numeric(data_burst$context_cat)]
@@ -25,7 +27,8 @@ data_burst$gram_catContrast = contrasts(data_burst$gram_cat)[,1][as.numeric(data
 
 ## RUN GLMERS ON PRESENCE OF BURST
 # Full model
-data_burst.glmer = glmer(burst_presence ~ context_catContrast * context_start_lgContrast + taskContrast + gram_catContrast + (1+context_catContrast+taskContrast|speaker), data=data_burst, family="binomial")
+data_burst.glmer = glmer(burst_presence ~ context_catContrast * context_start_lgContrast + taskContrast + gram_catContrast +
+                           (1+context_catContrast+taskContrast|speaker), data=data_burst, family="binomial")
 
 summary(data_burst.glmer)
 

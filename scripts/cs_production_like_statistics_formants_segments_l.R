@@ -1,5 +1,5 @@
 ## READ IN DATA ####
-source("scripts/data_organization_formants_segments_bark.R")
+source("scripts/cs_production_like_cleaning_formants_segments.R")
 
 
 ## ORGANIZE DATA ####
