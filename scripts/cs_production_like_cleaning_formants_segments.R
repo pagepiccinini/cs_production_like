@@ -3,11 +3,11 @@ library(dplyr)
 
 
 ## READ IN DATA ####
-formant = read.table("data/formants_segments.txt", header=T, sep="\t")
+formant_segments = read.table("data/formants_segments.txt", header=T, sep="\t")
 
 
 ## CLEAN DATA ####
-formant_clean = formant %>%
+formant_segments_clean = formant_segments %>%
   # Add column for gender
 	mutate(sex = ifelse(speaker == "BESM_07" | speaker == "BESM_08", "M", "F")) %>%
   mutate(sex = factor(sex)) %>%
@@ -29,7 +29,7 @@ formant_clean = formant %>%
 
 ## REMOVE OUTLIERS ####
 # Compute F1, F2, and F3 means and standard deviations
-formant_sum = formant_clean %>%
+formant_segments_sum = formant_segments_clean %>%
 	group_by(speaker, percentage, phoneme) %>%
 	summarize(mean_f1=mean(f1, na.rm=TRUE),
 				mean_f2=mean(f2, na.rm=TRUE),
@@ -46,8 +46,8 @@ formant_sum = formant_clean %>%
 	mutate(low_f3 = mean_f3 - 2*sd_f3)
 	
 # Remove outliers for a given participant (does not remove lines, turns into NA)
-formant_noout = formant_clean %>%
-	inner_join(formant_sum) %>%
+formant_segments_noout = formant_segments_clean %>%
+	inner_join(formant_segments_sum) %>%
 	mutate(f1 = ifelse(f1 > high_f1, NA, f1)) %>%
 	mutate(f1 = ifelse(f1 < low_f1, NA, f1)) %>%
 	mutate(f2 = ifelse(f2 > high_f2, NA, f2)) %>%
@@ -65,11 +65,9 @@ formant_noout = formant_clean %>%
 	mutate(f1_norm_bark = ifelse(f1_norm_bark < 6, NA, f1_norm_bark))
 	
 	
-
-
 ## COMPUTE VARAIBLES FOR TESTING ####
 # [l]
-formant_l = formant_noout %>%
+formant_l = formant_segments_noout %>%
   filter(phoneme == "l") %>%
 	mutate(phoneme = factor(phoneme))
 	
@@ -80,7 +78,7 @@ formant_l_sum = formant_l %>%
 	ungroup()
 	
 # [ai] - nucleus
-formant_ai_nuc = formant_noout %>%
+formant_ai_nuc = formant_segments_noout %>%
 	filter(phoneme == "ai")	 %>%
 	filter(percentage >= 25 | percentage <= 75) %>%
   mutate(phoneme = factor(phoneme))
@@ -97,7 +95,7 @@ formant_ai_nuc_sum = inner_join(formant_ai_nuc, formant_ai_nuc_maxf1) %>%
 	inner_join(formant_ai_nuc)
 
 # [ai] - offglide
-formant_ai_off = formant_noout %>%
+formant_ai_off = formant_segments_noout %>%
 	filter(phoneme == "ai")	 %>%
 	filter(percentage > 75) %>%
   mutate(phoneme = factor(phoneme))
