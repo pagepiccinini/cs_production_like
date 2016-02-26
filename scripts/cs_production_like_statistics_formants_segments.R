@@ -21,6 +21,13 @@ formant_ai_nuc_stats = formant_ai_nuc_sum %>%
   # Language at start of 'like' (baseline set to English)
   mutate(context_start_lgContrast = ifelse(context_start_lg == "E", -0.5, 0.5))
 
+# [ai] - off
+formant_ai_off_stats = formant_ai_off_sum %>%
+  # Context (baseline set to ML)
+  mutate(context_catContrast = ifelse(context_cat == "ML", -0.5, 0.5)) %>%
+  # Language at start of 'like' (baseline set to English)
+  mutate(context_start_lgContrast = ifelse(context_start_lg == "E", -0.5, 0.5))
+
 
 ## [l]: BUILD MODELS FOR F1 ####
 # Full model
@@ -150,9 +157,64 @@ nuc_f2_contextxstartlg.lmer = lmer(f2_norm_bark ~ context_catContrast * context_
 nuc_f2_contextxstartlg.anova = anova(nuc_f2.lmer, nuc_f2_contextxstartlg.lmer)
 
 
+## [ai] - OFFGLIDE: BUILD MODELS FOR F1 ####
+# Full model
+off_f1.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast +
+                  (1+context_start_lgContrast|speaker),
+                  data = formant_ai_off_stats, REML=F)
+
+off_f1.lmer_sum = summary(off_f1.lmer)
+
+# Test for effect of context
+off_f1_context.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast - context_catContrast +
+                          (1+context_start_lgContrast|speaker),
+                          data = formant_ai_off_stats, REML=F)
+
+off_f1_context.anova = anova(off_f1.lmer, off_f1_context.lmer)
+
+# Test for effect of starting language
+off_f1_startlg.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast - context_start_lgContrast +
+                          (1+context_start_lgContrast|speaker),
+                          data = formant_ai_off_stats, REML=F)
+
+off_f1_startlg.anova = anova(off_f1.lmer, off_f1_startlg.lmer)
+
+# Test for interaction of context and starting language
+off_f1_contextxstartlg.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast - context_catContrast:context_start_lgContrast +
+                                  (1+context_start_lgContrast|speaker),
+                                  data = formant_ai_off_stats, REML=F)
+
+off_f1_contextxstartlg.anova = anova(off_f1.lmer, off_f1_contextxstartlg.lmer)
 
 
+## [ai] - OFFGLIDE: BUILD MODELS FOR F2 ####
+# Full model
+off_f2.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast +
+                  (1+context_start_lgContrast|speaker),
+                  data = formant_ai_off_stats, REML=F)
 
+off_f2.lmer_sum = summary(off_f2.lmer)
+
+# Test for effect of context
+off_f2_context.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast - context_catContrast +
+                          (1+context_start_lgContrast|speaker),
+                          data = formant_ai_off_stats, REML=F)
+
+off_f2_context.anova = anova(off_f2.lmer, off_f2_context.lmer)
+
+# Test for effect of starting language
+off_f2_startlg.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast - context_start_lgContrast +
+                          (1+context_start_lgContrast|speaker),
+                          data = formant_ai_off_stats, REML=F)
+
+off_f2_startlg.anova = anova(off_f2.lmer, off_f2_startlg.lmer)
+
+# Test for interaction of context and starting language
+off_f2_contextxstartlg.lmer = lmer(f2_norm_bark ~ context_catContrast * context_start_lgContrast - context_catContrast:context_start_lgContrast +
+                                  (1+context_start_lgContrast|speaker),
+                                  data = formant_ai_off_stats, REML=F)
+
+off_f2_contextxstartlg.anova = anova(off_f2.lmer, off_f2_contextxstartlg.lmer)
 
 
 
