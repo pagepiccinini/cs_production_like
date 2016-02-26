@@ -94,7 +94,7 @@ formant_ai_nuc_sum = inner_join(formant_ai_nuc, formant_ai_nuc_maxf1) %>%
 	group_by(speaker, task, time_stamp, context_cat, context_start_lg, sex, f1_norm_bark) %>%
 	summarize(percentage = round(mean(percentage))) %>%
 	ungroup() %>%
-	inner_join(data_ai_nuc)
+	inner_join(formant_ai_nuc)
 
 # [ai] - offglide
 formant_ai_off = formant_noout %>%
