@@ -14,6 +14,7 @@ formant_stats = formant_noout %>%
   mutate(context_start_lgContrast = ifelse(context_start_lg == "E", -0.5, 0.5))
   
 
+
 ## BULD MODELS FOR F1 ####
 # Full model
 f1.lmer = lmer(f1_norm_bark ~ context_catContrast * context_start_lgContrast * percentage +
