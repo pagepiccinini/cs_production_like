@@ -1,9 +1,9 @@
-## LOAD PACKAGES ####
-library(lme4)
-
-
 ## READ IN DATA ####
 source("scripts/cs_production_like_cleaning_duration.R")
+
+
+## LOAD PACKAGES ####
+library(lme4)
 	
 	
 ## ORGANIZE DATA ####
