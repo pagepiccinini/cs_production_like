@@ -20,5 +20,4 @@ dur_clean = dur %>%
 	mutate(context_specific = factor(context_specific)) %>%
 	# Clean up other variables
 	mutate(context_start_lg = factor(context_start_lg)) %>%
-	mutate(context_specific = factor(context_specific)) %>%
 	mutate(context_cat = factor(context_cat))
