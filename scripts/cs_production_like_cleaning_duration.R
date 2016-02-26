@@ -1,22 +1,24 @@
 ## LOAD PACKAGES ####
-# [none currently]
+library(dplyr)
 
 
-## READ IN DATA AND CLEAN
-data = read.table("data/duration.txt", header=T, sep="\t")
+## READ IN DATA ####
+dur = read.table("data/duration.txt", header=T, sep="\t")
 
-# Get rid of 'verb' and 'grammatical' tokens
-data = subset(data, gram_cat!="V" & gram_cat!="G")
-	data$gram_cat = factor(data$gram_cat)
-	
-# Get rid of 'CS3' tokens
-data = subset(data, context_cat!="CS3")
-	data$context_cat = factor(data$context_cat)
-	data$context_start_lg = factor(data$context_start_lg)
-	data$context_specific = factor(data$context_specific)
-	
-# Subset out data with main code-switching tokens
-data_sub = subset(data, context_specific=="E" | context_specific=="S" | context_specific=="CS_ES" | context_specific=="CS_SE")
-	data_sub$context_specific = factor(data_sub$context_specific)
-	data_sub$context_cat = factor(data_sub$context_cat)
-	data_sub$context_start_lg = factor(data_sub$context_start_lg)
+
+## CLEAN DATA ####
+dur_clean = dur %>%
+  # Get rid of 'verb' and 'grammatical' tokens
+  filter(gram_cat != "V" & gram_cat != "G") %>%
+	mutate(gram_cat = factor(gram_cat)) %>%
+	# Get rid of 'CS3' tokens
+  filter(context_cat != "CS3") %>%
+	mutate(context_cat = factor(context_cat)) %>%
+	# Subset out data with main code-switching tokens
+  filter(context_specific=="E" | context_specific=="S" |
+           context_specific=="CS_ES" | context_specific=="CS_SE") %>%
+	mutate(context_specific = factor(context_specific)) %>%
+	# Clean up other variables
+	mutate(context_start_lg = factor(context_start_lg)) %>%
+	mutate(context_specific = factor(context_specific)) %>%
+	mutate(context_cat = factor(context_cat))
